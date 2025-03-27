@@ -1,0 +1,70 @@
+<main>
+  <div style="padding: 0 300px;">
+    <h1 style="margin-top: 20px;">Cadastro de Processo</h1>
+  </div>
+
+  <div style="padding: 30px 300px;">
+    <a mat-button [routerLink]="['/processo-listagem']">Listagem de Processos</a>
+  </div>
+
+  <form style="padding: 0 300px;" [formGroup]="processoForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
+
+    <mat-form-field class="example-full-width">
+      <mat-label>NPU:</mat-label>
+      <input matInput name="npu" id="npu" formControlName="npu" mask="0000000-00.0000.0.00.0000">
+      @if (processoForm.controls.npu.hasError('required')) {
+      <mat-error>Campo NUP é obrigatório</mat-error>
+      }
+      @if (processoForm.controls.npu.hasError('mask')) {
+      <mat-error>Campo NUP deve seguir o formato XXXXXXX-XX.XXXX.X.XX.XXXX</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width">
+      <mat-label>UF</mat-label>
+      <input matInput aria-label="UF" [matAutocomplete]="uf" formControlName="uf">
+      <mat-autocomplete #uf="matAutocomplete" (optionSelected)='listarMunicipiosByUf($event.option.value)'>
+        @for (estado of estadosFiltrados | async; track estado) {
+        <mat-option [value]="estado.sigla">
+          <span>{{estado.nome}} - {{estado.sigla}}</span>
+        </mat-option>
+        }
+      </mat-autocomplete>
+      @if (processoForm.controls.uf.hasError('required')) {
+      <mat-error>Campo UF é obrigatório</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width">
+      <mat-label>Município</mat-label>
+      <input matInput aria-label="Município" [matAutocomplete]="municipio" formControlName="municipio">
+      <mat-autocomplete #municipio="matAutocomplete">
+        @for (municipio of municipiosFiltrados | async; track municipio) {
+        <mat-option [value]="municipio.nome">
+          <span>{{municipio.nome}}</span>
+        </mat-option>
+        }
+      </mat-autocomplete>
+      @if (processoForm.controls.municipio.hasError('required')) {
+      <mat-error>Campo Município é obrigatório</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width">
+      <mat-label>Documento em PDF</mat-label>
+      <input matInput name="pdfDocumentoFileName" id="pdfDocumentoFileName" formControlName="pdfDocumentoFileName"
+        placeholder="Selecionar PDF">
+      @if (processoForm.controls.pdfDocumentoFileName.hasError('required')) {
+      <mat-error>Campo Documento em PDF é obrigatório</mat-error>
+      }
+    </mat-form-field>
+
+    <input type="file" class="file-input" [accept]="'.pdf'" (change)="onFileSelected($event)" #fileUpload>
+    <div class="file-upload" style="margin-bottom: 30px;">
+      <a style="color: #005cbb; cursor: pointer;" (click)="fileUpload.click()">Selecionar PDF</a>
+    </div>
+    <button type="submit" mat-flat-button
+      [disabled]="!processoForm.valid || !processoForm.controls.pdfDocumentoFileName.value || !pdfDocumento">Salvar</button>
+  </form>
+
+</main>

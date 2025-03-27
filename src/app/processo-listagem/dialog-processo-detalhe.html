@@ -1,0 +1,32 @@
+<h2 mat-dialog-title>Processo: </h2>
+<mat-dialog-content>
+  <ul>
+    <li>
+      <span style="font-weight: bold;">NPU:</span>
+      {{data.processo.npu | npu}}
+    </li>
+    <li>
+      <span style="font-weight: bold;">Data de Cadastro:</span>
+      {{data.processo.dataCadastro | date:'medium'}}
+    </li>
+    <li>
+      <span style="font-weight: bold;">Data de Visualização:</span>
+      {{data.processo.dataVisualizacao | date:'medium'}}
+    </li>
+    <li>
+      <span style="font-weight: bold;">UF:</span>
+      {{data.processo.uf}}
+    </li>
+    <li>
+      <span style="font-weight: bold;">Município:</span>
+      {{data.processo.municipio}}
+    </li>
+    <li>
+      <span style="font-weight: bold;">Documento em PDF: </span>
+      <a style="color: #005cbb; cursor: pointer;" (click)="download()">{{data.processo.pdfDocumentoFileName}}</a>
+    </li>
+  </ul>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="onCloseClick()">Fechar</button>
+</mat-dialog-actions>
